@@ -71,3 +71,4 @@ console.log(sevak.author);
 // console.log(sevak.author);
 console.log(sevak.toString());
 console.log(sevak.getProfit());
+// console.log(karlen.name, sevak.author);
