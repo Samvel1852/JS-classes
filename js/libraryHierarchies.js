@@ -115,23 +115,25 @@ class Reader {
       if (books[i].title === book.title && books[i].author === book.author) {
         this.readerBooks.push(books[i]);
         books[i].quantity -= 1;
-        this.readerBooks[this.readerBooks.length - 1].quantity = 1;
+        console.log("books[i]::", books[i]);
+        // this.readerBooks[this.readerBooks.length - 1].quantity = 1;
+        console.log("books[i]::2", books[i]);
         return this.readerBooks;
       }
     }
   }
 }
-
+console.log("Exuperycheck::", books);
 let smbat = new Reader("Smbat", "Balyan", 12);
 
 console.log(
   "READER:SMBAT::",
   smbat.borrowBook({ title: "Little Prince", author: "Exupery" })
 );
-class Library extends LibraryBook {
-  constructor(title, author, bookId, quantity) {
-    super(title, author, bookId, quantity);
-  }
+
+console.log("Exuperycheck::2", books);
+class Library {
+  constructor() {}
 
   doHaveBooks(book) {
     for (let i = 0; i < books.length; i += 1) {
@@ -161,5 +163,7 @@ let gradaran = new Library();
 console.log(
   gradaran.doHaveBooks({ title: "Little Prince", author: "Exupery" })
 );
+// console.log(books);
 console.log(gradaran.addBook({ title: "esim inch", author: "esim ov" }));
-// console.log(gradaran.addBook({ title: "Little Prince", author: "Exupery" }));
+console.log(gradaran.addBook({ title: "Little Prince", author: "Exupery" }));
+console.log(gradaran.addBook({ title: "Little Prince", author: "Exupery" }));
