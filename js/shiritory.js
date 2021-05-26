@@ -23,7 +23,7 @@ class Shiritory {
           return this.words;
         } else {
           this.game_over = true;
-          this.words = [];
+          //   this.words = [];
           return "Game Over";
         }
       } else {
@@ -32,6 +32,12 @@ class Shiritory {
       }
     }
   }
+
+  restart() {
+    this.words = [];
+    this.game_over = false;
+    return "Game restarted";
+  }
 }
 
 let myShiritori = new Shiritory();
@@ -39,4 +45,6 @@ let myShiritori = new Shiritory();
 console.log(myShiritori.play("Yerevan"));
 console.log(myShiritori.play("Nice"));
 console.log(myShiritori.play("Moscow"));
+console.log(myShiritori.play("London"));
+console.log(myShiritori.restart());
 console.log(myShiritori.play("London"));
