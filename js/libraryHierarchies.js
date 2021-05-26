@@ -3,6 +3,8 @@
 // To create correct hierarchies and connections, you should have a subclasses of Book such as
 // LibraryBookBase, LibraryBook, ReaderBook.
 
+const books = [];
+
 class Book {
   constructor(title, author, bookId) {
     this.title = title;
@@ -16,9 +18,9 @@ class Book {
 
   isTheSameBook(title, author) {
     if (this.title === title && this.author === author) {
-      return "The same book";
+      return true;
     }
-    return "Not the same book";
+    return false;
   }
 }
 
@@ -48,6 +50,7 @@ class LibraryBook extends Book {
   constructor(title, author, bookId, quantity) {
     super(title, author, bookId);
     this.quantity = quantity;
+    books.push(this);
   }
 
   increaseQuantityBy(amount) {
@@ -66,19 +69,25 @@ let saroyan = new LibraryBook(
   10
 );
 
+let exupery = new LibraryBook("Little Prince", "Exupery", 55, 20);
+
+console.log("Books::1", books);
+
 console.log(saroyan);
 saroyan.increaseQuantityBy(10);
 console.log(saroyan);
 saroyan.decreaseQuantityBy(5);
 console.log(saroyan);
 
+console.log("Books::2", books);
+
 class ReaderBook extends Book {
-    static books = [];
+  static books = [];
   constructor(title, author, bookId, expirationDate, isReturned) {
     super(title, author, bookId);
     this.expirationDate = expirationDate;
     this.isReturned = isReturned;
-    this.books.push([this.title, )
+    // this.books.push([this.title]);
   }
 }
 
@@ -93,45 +102,62 @@ let rdBook = new ReaderBook(
 console.log(rdBook);
 
 class Reader {
-  constructor(firstName, lastName, readerId, books) {
+  constructor(firstName, lastName, readerId, readerBooks = []) {
     this.firstName = firstName;
     this.lastName = lastName;
     this.readerId = readerId;
-    this.books = books;
+    this.readerBooks = readerBooks;
+  }
+
+  borrowBook(book, library) {
+    for (let i = 0; i < books.length; i += 1) {
+      if (books[i].title === book.title && books[i].author === book.author) {
+        this.readerBooks.push(books[i]);
+        books[i].quantity -= 1;
+        this.readerBooks[this.readerBooks.length - 1].quantity = 1;
+        return this.readerBooks;
+      }
+    }
   }
 }
 
+let smbat = new Reader("Smbat", "Balyan", 12);
+
+console.log(
+  "READER:SMBAT::",
+  smbat.borrowBook({ title: "Little Prince", author: "Exupery" })
+);
 class Library {
-    constructor (books, readers) {
-        this.books = books;
-        this.readers = readers;
-    }
+  constructor(books, readers) {
+    this.books = books;
+    this.readers = readers;
+  }
 
-    doHaveBooks (book) {
-        if (this.books.includes(book)){
-            return true;
-        }
-        return false;
+  doHaveBooks(book) {
+    if (this.books.includes(book)) {
+      return true;
     }
+    return false;
+  }
 
-    addBook(book){
-        // this.books.forEach((item, index) => {
-        //     if (item.id === book.id){
-        //         item.quantity += 1
-        //     }
-        //     if (index === this.books.length) {
+  addBook(book) {
+    // this.books.forEach((item, index) => {
+    //     if (item.id === book.id){
+    //         item.quantity += 1
+    //     }
+    //     if (index === this.books.length) {
 
-        //     }
-        // })
-        for (let i = 0; i < this.books.length; i += 1){
-            let item = this.books[i];
-            if (item.id === book.id){
-                item.quantity += 1;
-                break
-            }
-            if (i === this.books.length - 1){
-                this.books.push(book);
-            }
-        }
+    //     }
+    // })
+    for (let i = 0; i < this.books.length; i += 1) {
+      let item = this.books[i];
+      if (item.id === book.id) {
+        item.quantity += 1;
+        break;
+      }
+      if (i === this.books.length - 1) {
+        this.books.push(book);
+      }
     }
+  }
 }
