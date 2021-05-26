@@ -4,6 +4,7 @@
 // LibraryBookBase, LibraryBook, ReaderBook.
 
 const books = [];
+const readers = [];
 
 class Book {
   constructor(title, author, bookId) {
@@ -127,37 +128,38 @@ console.log(
   "READER:SMBAT::",
   smbat.borrowBook({ title: "Little Prince", author: "Exupery" })
 );
-class Library {
-  constructor(books, readers) {
-    this.books = books;
-    this.readers = readers;
+class Library extends LibraryBook {
+  constructor(title, author, bookId, quantity) {
+    super(title, author, bookId, quantity);
   }
 
   doHaveBooks(book) {
-    if (this.books.includes(book)) {
-      return true;
+    for (let i = 0; i < books.length; i += 1) {
+      if (books[i].title === book.title && books[i].author === book.author) {
+        return true;
+      }
     }
     return false;
   }
 
   addBook(book) {
-    // this.books.forEach((item, index) => {
-    //     if (item.id === book.id){
-    //         item.quantity += 1
-    //     }
-    //     if (index === this.books.length) {
-
-    //     }
-    // })
-    for (let i = 0; i < this.books.length; i += 1) {
-      let item = this.books[i];
-      if (item.id === book.id) {
-        item.quantity += 1;
-        break;
-      }
-      if (i === this.books.length - 1) {
-        this.books.push(book);
+    for (let i = 0; i < books.length; i += 1) {
+      if (books[i].title === book.title && books[i].author === book.author) {
+        books[i].quantity += 1;
+        return books;
       }
     }
+    book.id = 13;
+    book.quantity = 1;
+    books.push(book);
+    return books;
   }
 }
+
+let gradaran = new Library();
+
+console.log(
+  gradaran.doHaveBooks({ title: "Little Prince", author: "Exupery" })
+);
+console.log(gradaran.addBook({ title: "esim inch", author: "esim ov" }));
+// console.log(gradaran.addBook({ title: "Little Prince", author: "Exupery" }));
