@@ -7,7 +7,7 @@ const books = [];
 const readers = [];
 
 class Book {
-  constructor(title, author, bookId) {
+  constructor(title, author, bookId = 0) {
     this.title = title;
     this.author = author;
     this.bookId = bookId;
@@ -115,12 +115,24 @@ class Reader {
       if (books[i].title === book.title && books[i].author === book.author) {
         this.readerBooks.push(books[i]);
         books[i].quantity -= 1;
-        console.log("books[i]::", books[i]);
         // this.readerBooks[this.readerBooks.length - 1].quantity = 1;
         console.log("books[i]::2", books[i]);
+        readers.push({
+          name: this.firstName,
+          surname: this.lastName,
+          readerId: this.readerId,
+          booksOfReader: this.readerBooks,
+        });
+        // readers[readers.length - 1].quantity = 1;
         return this.readerBooks;
       }
     }
+    readers.push({
+      name: this.firstName,
+      surname: this.lastName,
+      readerId: this.readerId,
+      booksOfReader: this.readerBooks,
+    });
   }
 }
 console.log("Exuperycheck::", books);
@@ -151,13 +163,66 @@ class Library {
         return books;
       }
     }
-    book.id = 13;
+    book.bookId = 400;
     book.quantity = 1;
     books.push(book);
     return books;
   }
-}
 
+  addBooks(newBooks) {
+    // console.log("BEFORE ADD BOOKS", books);
+    for (let i = 0; i < books.length; i += 1) {
+      for (let j = 0; j < newBooks.length; j += 1) {
+        // console.log("FOR CONSOLE::", books[i], newBooks[j]);
+        if (
+          books[i].title === newBooks[j].title &&
+          books[i].author === newBooks[j].author
+        ) {
+          books[i].quantity += newBooks[j].quantity;
+        } else {
+          if (i === books.length - 1) {
+            // newBooks[j].bookId = 300;
+            newBooks[j].bookId = Math.floor(Math.random() * 1000000);
+            books.push(newBooks[j]);
+            newBooks.splice(j, 1);
+            j -= 1;
+          }
+          continue;
+        }
+      }
+    }
+    return books;
+  }
+
+  checkTheReaderId(givenReaderId) {
+    return readers.some((reader) => reader.readerId === givenReaderId);
+  }
+
+  lendBook(book, currentReaderId) {
+    let isBookExists = false;
+    for (let i = 0; i < books.length; i += 1) {
+      if (books[i].title === book.title && books[i].author === book.author) {
+        isBookExists = true;
+      }
+    }
+    // console.log(readers);
+    let currentReader = readers.filter(
+      (reader) => reader.readerId === currentReaderId
+    );
+    console.log(currentReader);
+
+    if (
+      currentReader[0].booksOfReader.some(
+        (item) => item.bookId === book.bookId
+      ) &&
+      isBookExists
+    ) {
+      return [book, ...currentReader];
+    }
+    return false;
+  }
+}
+console.log("READERS::", readers);
 let gradaran = new Library();
 
 console.log(
@@ -167,3 +232,22 @@ console.log(
 console.log(gradaran.addBook({ title: "esim inch", author: "esim ov" }));
 console.log(gradaran.addBook({ title: "Little Prince", author: "Exupery" }));
 console.log(gradaran.addBook({ title: "Little Prince", author: "Exupery" }));
+console.log(
+  gradaran.addBooks([
+    { title: "Little Prince", author: "Exupery", quantity: 15 },
+    { title: "mihat girq", author: "mihat mard", quantity: 4 },
+  ])
+);
+
+console.log(gradaran.checkTheReaderId(12));
+console.log(
+  gradaran.lendBook(
+    {
+      title: "Little Prince",
+      author: "Exupery",
+      bookId: 55,
+      quantity: 36,
+    },
+    12
+  )
+);
